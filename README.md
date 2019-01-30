@@ -6,4 +6,4 @@ Assignment 2, exercise 2: https://it-teaching-abo-akademi.github.io/2018-interac
 Zip code lookup and visualization. Needs access to the location of the device to function.
 
 Assignment 2, exercise 3: https://derjontte.github.io/Interactive_web_apps_-_Assignment_2/exercise3.html.
-An app for plotting bus lines and the realtime positions of the buses of Turku area local transit.
+An app for plotting the bus lines and realtime positions of the local transit buses in the Turku area.
