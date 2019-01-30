@@ -26,9 +26,9 @@ function setMarker(position, markerName){
 
 // Function to remove all markers from the map and empty the list of markers.
 function clearMarkers() {
-    for (let i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-    }
+    markers.map(mark => {
+        mark.setMap(null);
+    });
     markers = [];
 }
 
@@ -36,8 +36,6 @@ function clearMarkers() {
 // list of bus lines.
 function populateRouteList() {
     $.getJSON("https://data.foli.fi/gtfs/routes", function(response) { // Fetch the data
-        let routeList = [];
-
         // Sort the data by the line number
         response = response.sort(function (a, b) {
             let regex = /\D/;
@@ -57,7 +55,7 @@ function populateRouteList() {
         });
 
         // Go through the sorted data and parse it into the list that is shown in the dropdown menu
-        response.forEach(item => {
+        response.map(item => {
             let lineName = item.route_short_name + ": " + item.route_long_name;
             var newOption = new Option(lineName, JSON.stringify({name: item.route_short_name, lineID: item.route_id}));
             $("#route_number").append(newOption);
@@ -85,18 +83,18 @@ function plotRoute(selectedLine) {
 
         // Find the route shape with the most occurances
         let biggest = {name: "", value: 0};
-        Object.getOwnPropertyNames(table).forEach(name => {
+        Object.getOwnPropertyNames(table).map(name => {
             biggest = (table[name] > biggest.value) ? {name: name, value: table[name]} : biggest;
         });
 
         // Fetch the shape that was selected above and draw it on the map
         $.getJSON("https://data.foli.fi/gtfs/v0/20190103-094234/shapes/" + biggest.name, function (routePoints) {
             let routeLine = [];
+
             // Create a Google Maps API-compatible list with the route points
-            for (let i = 0; i < routePoints.length; i++) {
-                let newPoint = {lat: routePoints[i].lat, lng: routePoints[i].lon};
-                routeLine.push(newPoint);
-            }
+            routeLine = routePoints.map(point => {
+                return ({lat: point.lat, lng: point.lon});
+            });
 
             // If there is an earlier route drawn on the map, remove it
             if (routePath !== undefined) {
@@ -148,11 +146,11 @@ function plotVehicles(selectedLine) {
         // Remove any earlier markers
         clearMarkers();
 
-        // If there is a bus line plotted that is not the currently selected line, removit
+        // If there is a bus line plotted that is not the currently selected line, remove it
         if (plottedLine !== selectedLine) clearRoute();
 
         // Parse the vehicle data for the ones that belong to the selected line and set their markers on the map
-        Object.getOwnPropertyNames(vehicleData).forEach(itemName => {
+        Object.getOwnPropertyNames(vehicleData).map(itemName => {
             let item = vehicleData[itemName];
             if (item.publishedlinename === routeName) {
                 let newPoint = new google.maps.LatLng(item.latitude, item.longitude);
