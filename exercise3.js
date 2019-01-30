@@ -88,7 +88,7 @@ function plotRoute(selectedLine) {
         });
 
         // Fetch the shape that was selected above and draw it on the map
-        $.getJSON("https://data.foli.fi/gtfs/v0/20190103-094234/shapes/" + biggest.name, function (routePoints) {
+        $.getJSON("https://data.foli.fi/gtfs/shapes/" + biggest.name, function (routePoints) {
             let routeLine = [];
 
             // Create a Google Maps API-compatible list with the route points
